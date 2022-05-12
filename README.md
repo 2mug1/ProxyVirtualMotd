@@ -2,7 +2,7 @@
 プレイヤー別に 仮想 Motd を生成します\
 For Minecraft Proxy (BungeeCord / Waterfall) Plugin
 
-`Waterfall 1.18 v483`: 動作確認済み
+`Waterfall 1.18 v483` 動作確認済み
 
 ## Features
 実装済みの機能です (今後、新機能が追加されるかもしれません)
