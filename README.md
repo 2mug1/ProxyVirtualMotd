@@ -17,7 +17,7 @@ For Minecraft Proxy (BungeeCord / Waterfall) Plugin
 ```yml
 motd: '&7Welcome to the &a%virtual_hostname%&7, &e%player_name% &7!' #プレイヤー別に表示される仮想 Motd
 to_first_player_text: "Nice to meet you" # プレイヤーキャッシュにデータが存在しない時、%player_name% の部分に表示されるメッセージ
-player_favicon_enabled: true #プレイヤー別に表示される当該プレイヤーのヘッドアイコン表示有無
+player_favicon_enabled: false #プレイヤー別に表示される当該プレイヤーのヘッドアイコン表示有無
 ```
 
 ## LICENSE
