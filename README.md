@@ -1,7 +1,7 @@
 # ProxyVirtualMotd
 [![Build](https://github.com/takagi-minecraft-lab/ProxyVirtualMotd/actions/workflows/build.yml/badge.svg)](https://github.com/takagi-minecraft-lab/ProxyVirtualMotd/actions/workflows/build.yml)
 
-プレイヤー別に 仮想 Motd を生成します\
+プレイヤー毎に 仮想 Motd を生成します\
 For Minecraft Proxy (BungeeCord / Waterfall) Plugin
 
 `Waterfall 1.18 v483` 動作確認済み
@@ -19,6 +19,9 @@ motd: '&7Welcome to the &a%virtual_hostname%&7, &e%player_name% &7!' #プレイ�
 to_first_player_text: "Nice to meet you" # プレイヤーキャッシュにデータが存在しない時、%player_name% の部分に表示されるメッセージ
 player_favicon_enabled: false #プレイヤー別に表示される当該プレイヤーのヘッドアイコン表示有無
 ```
+
+## Build
+`$ mvn clean package`
 
 ## LICENSE
 MIT License.
