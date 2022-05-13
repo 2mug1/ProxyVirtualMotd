@@ -39,8 +39,10 @@ import java.util.List;
 
 public final class ProxyVirtualMotd extends Plugin {
 
-    @Getter private static ProxyVirtualMotd instance;
-    @Getter private static Gson gson;
+    @Getter
+    private static ProxyVirtualMotd instance;
+    @Getter
+    private static Gson gson;
     private Config config;
     private AddressCache addressCache;
 
@@ -80,28 +82,28 @@ public final class ProxyVirtualMotd extends Plugin {
             String motd;
             ServerPing res = event.getResponse();
 
-            if(data != null) {
+            if (data != null) {
                 motd = config.getPlayerMotd();
                 String username = API.MojangAPI.getUsernameByUUID(data.getUuid());
 
-                if(username != null) {
+                if (username != null) {
                     motd = motd.replace("%player_name%", username);
                 }
 
-                if(virtualHostname != null) {
+                if (virtualHostname != null) {
                     motd = motd.replace("%virtual_hostname%", virtualHostname);
                 }
 
                 // プレイヤーアイコン
-                if(config.isPlayerFaviconEnabled()){
+                if (config.isPlayerFaviconEnabled()) {
                     BufferedImage headImage64 = API.MCHeadsAPI.getHeadImage64(data.getUuid());
-                    if(headImage64 != null) {
+                    if (headImage64 != null) {
                         Favicon favicon = Favicon.create(headImage64);
                         res.setFavicon(favicon);
                     }
                 }
             } else {
-                motd = config.getDefaultMotd(); //データが無い時
+                motd = config.getDefaultMotd(); // データが無い時
             }
 
             res.setDescriptionComponent(new ComponentBuilder(motd).getCurrentComponent());
@@ -117,7 +119,7 @@ public final class ProxyVirtualMotd extends Plugin {
             String hostAddress = inetAddress.getHostAddress();
             AddressData data = addressCache.findByUUID(uuid);
 
-            if(data != null){
+            if (data != null) {
                 data.setAddress(hostAddress);
             } else {
                 addressCache.getCache().add(new AddressData(uuid, hostAddress));
@@ -137,6 +139,7 @@ public final class ProxyVirtualMotd extends Plugin {
 
             /**
              * UUID から Username を返却します
+             * 
              * @param uuid
              * @return
              */
@@ -160,6 +163,7 @@ public final class ProxyVirtualMotd extends Plugin {
 
             /**
              * 64 x 64 のプレイヤーアイコン画像を返却します
+             * 
              * @param uuid
              * @return
              */
@@ -172,7 +176,8 @@ public final class ProxyVirtualMotd extends Plugin {
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-                if(url == null) return null;
+                if (url == null)
+                    return null;
                 try {
                     image = ImageIO.read(url);
                 } catch (IOException e) {
@@ -186,9 +191,22 @@ public final class ProxyVirtualMotd extends Plugin {
     @AllArgsConstructor
     private static class Config {
 
-        @Getter private String defaultMotd;
-        @Getter private String playerMotd;
-        @Getter private boolean playerFaviconEnabled;
+        @Getter
+        private String defaultMotd;
+        @Getter
+        private String playerMotd;
+        @Getter
+        private boolean playerFaviconEnabled;
+
+        @AllArgsConstructor
+        @Getter
+        enum ConfigProperty {
+            DEFAULT_MOTD("default_motd"),
+            PLAYER_MOTD("player_motd"),
+            PLAYER_FAVICON_ENABLED("player_favicon_enabled");
+
+            private final String path;
+        }
 
         public static Config load() {
             ProxyVirtualMotd instance = ProxyVirtualMotd.getInstance();
@@ -208,16 +226,21 @@ public final class ProxyVirtualMotd extends Plugin {
 
             Configuration configuration = null;
             try {
-                configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(dataFolder, "config.yml"));
+                configuration = ConfigurationProvider.getProvider(YamlConfiguration.class)
+                        .load(new File(dataFolder, "config.yml"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            return new Config (
-                    ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', configuration.getString("default_motd")),
-                    ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', configuration.getString("player_motd")),
-                    configuration.getBoolean("player_favicon_enabled")
-            );
+            assert configuration != null;
+
+            return new Config(
+                    ChatColor.RESET + ChatColor.translateAlternateColorCodes(
+                            '&', configuration.getString(ConfigProperty.DEFAULT_MOTD.getPath())),
+                    ChatColor.RESET + ChatColor.translateAlternateColorCodes('&',
+                            configuration.getString(ConfigProperty.PLAYER_MOTD.getPath())),
+                    configuration.getBoolean(
+                            ConfigProperty.PLAYER_FAVICON_ENABLED.getPath()));
         }
     }
 
@@ -231,12 +254,12 @@ public final class ProxyVirtualMotd extends Plugin {
     private class AddressDataDeserializer implements JsonDeserializer<AddressData> {
 
         @Override
-        public AddressData deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public AddressData deserialize(JsonElement jsonElement, Type type,
+                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             return new AddressData(
                     UUID.fromString(jsonObject.get("uuid").getAsString()),
-                    jsonObject.get("address").getAsString()
-            );
+                    jsonObject.get("address").getAsString());
         }
     }
 
@@ -246,7 +269,8 @@ public final class ProxyVirtualMotd extends Plugin {
         @Getter
         private final List<AddressData> cache;
 
-        private static final Type DATA_TYPE = new TypeToken<AddressData[]>() {}.getType();
+        private static final Type DATA_TYPE = new TypeToken<AddressData[]>() {
+        }.getType();
 
         public static AddressCache load() {
             File dataFolder = instance.getDataFolder();
@@ -287,13 +311,13 @@ public final class ProxyVirtualMotd extends Plugin {
         }
 
         public AddressData findByAddress(String address) {
-            return this.cache.stream().filter(playerAddress ->
-                    address.equals(playerAddress.getAddress())).findFirst().orElse(null);
+            return this.cache.stream().filter(playerAddress -> address.equals(playerAddress.getAddress())).findFirst()
+                    .orElse(null);
         }
 
         public AddressData findByUUID(UUID uuid) {
-            return this.cache.stream().filter(playerAddress ->
-                    uuid.equals(playerAddress.getUuid())).findFirst().orElse(null);
+            return this.cache.stream().filter(playerAddress -> uuid.equals(playerAddress.getUuid())).findFirst()
+                    .orElse(null);
         }
     }
 }
