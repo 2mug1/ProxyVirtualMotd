@@ -200,7 +200,7 @@ public final class ProxyVirtualMotd extends Plugin {
 
         @AllArgsConstructor
         @Getter
-        enum ConfigProperty {
+        private enum ConfigProperty {
             DEFAULT_MOTD("default_motd"),
             PLAYER_MOTD("player_motd"),
             PLAYER_FAVICON_ENABLED("player_favicon_enabled");
