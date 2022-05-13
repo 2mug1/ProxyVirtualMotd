@@ -76,14 +76,20 @@ public final class ProxyVirtualMotd extends Plugin {
             InetAddress inetAddress = socketAddress.getAddress();
             String hostAddress = inetAddress.getHostAddress();
             AddressData data = addressCache.findByAddress(hostAddress);
-            String motd = config.getMotd().replace("%virtual_hostname%", virtualHostname);
+
+            String motd;
             ServerPing res = event.getResponse();
 
             if(data != null) {
+                motd = config.getPlayerMotd();
                 String username = API.MojangAPI.getUsernameByUUID(data.getUuid());
 
-                if( username != null) {
+                if(username != null) {
                     motd = motd.replace("%player_name%", username);
+                }
+
+                if(virtualHostname != null) {
+                    motd = motd.replace("%virtual_hostname%", virtualHostname);
                 }
 
                 // プレイヤーアイコン
@@ -95,7 +101,7 @@ public final class ProxyVirtualMotd extends Plugin {
                     }
                 }
             } else {
-                motd = motd.replace("%player_name%", config.getToFirstPlayerText()); //データが無い時
+                motd = config.getDefaultMotd(); //データが無い時
             }
 
             res.setDescriptionComponent(new ComponentBuilder(motd).getCurrentComponent());
@@ -180,8 +186,8 @@ public final class ProxyVirtualMotd extends Plugin {
     @AllArgsConstructor
     private static class Config {
 
-        @Getter private String motd;
-        @Getter private String toFirstPlayerText;
+        @Getter private String defaultMotd;
+        @Getter private String playerMotd;
         @Getter private boolean playerFaviconEnabled;
 
         public static Config load() {
@@ -208,8 +214,8 @@ public final class ProxyVirtualMotd extends Plugin {
             }
 
             return new Config (
-                    ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', configuration.getString("motd")),
-                    configuration.getString("to_first_player_text"),
+                    ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', configuration.getString("default_motd")),
+                    ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', configuration.getString("player_motd")),
                     configuration.getBoolean("player_favicon_enabled")
             );
         }
@@ -256,7 +262,7 @@ public final class ProxyVirtualMotd extends Plugin {
                 }
             }
 
-            List<AddressData> cache = null;
+            List<AddressData> cache = new ArrayList<>();
 
             try {
                 JsonReader reader = new JsonReader(new FileReader(cacheFile));
