@@ -1,7 +1,7 @@
 # ProxyVirtualMotd
 [![Build](https://github.com/takagi-minecraft-lab/ProxyVirtualMotd/actions/workflows/build.yml/badge.svg)](https://github.com/takagi-minecraft-lab/ProxyVirtualMotd/actions/workflows/build.yml)
 
-プレイヤー毎に 仮想 Motd を表示するプラグインです\
+プレイヤー別に 仮想 Motd を表示するプラグインです\
 For Minecraft Proxy (BungeeCord / Waterfall) Plugin
 
 `Waterfall 1.18 v483` 動作確認済み
