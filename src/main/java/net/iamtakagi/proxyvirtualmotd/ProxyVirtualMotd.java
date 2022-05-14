@@ -86,12 +86,16 @@ public final class ProxyVirtualMotd extends Plugin {
                 motd = config.getPlayerMotd();
                 String username = API.MojangAPI.getUsernameByUUID(data.getUuid());
 
-                if (username != null) {
-                    motd = motd.replace("%player_name%", username);
+                if (motd.contains("%player_name%")) {
+                    if (username != null) {
+                        motd = motd.replace("%player_name%", username);
+                    }
                 }
 
-                if (virtualHostname != null) {
-                    motd = motd.replace("%virtual_hostname%", virtualHostname);
+                if(motd.contains("%virtual_hostname%")) {
+                    if (virtualHostname != null) {
+                        motd = motd.replace("%virtual_hostname%", virtualHostname);
+                    }
                 }
 
                 // プレイヤーアイコン
