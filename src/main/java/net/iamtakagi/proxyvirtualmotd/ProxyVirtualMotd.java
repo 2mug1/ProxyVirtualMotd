@@ -84,7 +84,7 @@ public final class ProxyVirtualMotd extends Plugin {
 
             if (data != null) {
                 motd = config.getPlayerMotd();
-                String username = API.MojangAPI.getUsernameByUUID(data.getUuid());
+                String username = External.MojangAPI.getUsernameByUUID(data.getUuid());
 
                 if (motd.contains("%player_name%")) {
                     if (username != null) {
@@ -100,7 +100,7 @@ public final class ProxyVirtualMotd extends Plugin {
 
                 // プレイヤーアイコン
                 if (config.isPlayerFaviconEnabled()) {
-                    BufferedImage headImage64 = API.MCHeadsAPI.getHeadImage64(data.getUuid());
+                    BufferedImage headImage64 = External.MCHeadsAPI.getHeadImage64(data.getUuid());
                     if (headImage64 != null) {
                         Favicon favicon = Favicon.create(headImage64);
                         res.setFavicon(favicon);
@@ -135,9 +135,9 @@ public final class ProxyVirtualMotd extends Plugin {
     /**
      * 利用したい外部のAPI関連
      */
-    private static class API {
+    private static class External {
 
-        static final String API_BASEURL = "https://api.mojang.com";
+        static final String API_BASEURL = "https://sessionserver.mojang.com";
 
         static final class MojangAPI {
 
@@ -148,7 +148,7 @@ public final class ProxyVirtualMotd extends Plugin {
              * @return
              */
             static String getUsernameByUUID(UUID uuid) {
-                String endpoint = API_BASEURL + "/user/profiles/" + uuid.toString().replace("-", "") + "/names";
+                String endpoint = API_BASEURL + "/session/minecraft/profile/" + uuid.toString().replace("-", "");
                 try {
                     String res = IOUtils.toString(new URL(endpoint), StandardCharsets.UTF_8);
                     JsonArray names = (JsonArray) JsonParser.parseString(res);
