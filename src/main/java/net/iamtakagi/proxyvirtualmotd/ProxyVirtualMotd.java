@@ -21,10 +21,13 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
+
+import java.awt.Event;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Type;
@@ -69,7 +72,7 @@ public final class ProxyVirtualMotd extends Plugin {
     }
 
     public class ProxyListener implements Listener {
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         public void onProxyPing(ProxyPingEvent event) {
             PendingConnection connection = event.getConnection();
             InetSocketAddress virtualHost = connection.getVirtualHost();
