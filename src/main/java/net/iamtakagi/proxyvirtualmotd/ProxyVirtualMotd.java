@@ -154,8 +154,7 @@ public final class ProxyVirtualMotd extends Plugin {
                 String endpoint = API_BASEURL + "/session/minecraft/profile/" + uuid.toString().replace("-", "");
                 try {
                     String res = IOUtils.toString(new URL(endpoint), StandardCharsets.UTF_8);
-                    JsonArray names = (JsonArray) JsonParser.parseString(res);
-                    JsonObject obj = (JsonObject) names.get(names.size() - 1);
+                    JsonObject obj = (JsonObject) JsonParser.parseString(res);
                     return obj.get("name").getAsString();
                 } catch (IOException e) {
                     e.printStackTrace();
